@@ -46,13 +46,13 @@ public class Move : MonoBehaviour
         Vector3 newPosition = myTrans.position;
         if (myTrans.right.x > 0)
         {
-            if (fightInput.rightDouableKeyDownCache.CacheKeyCodes.Length == 2) sprinting = true;
-            if (Input.GetKey(fightInput.rightKey))
+            if (fightInput.IsDoubleKeyDown(KeyCodeIndex.RightKeyCodeIdx)) sprinting = true;
+            if (fightInput.IsKey(KeyCodeIndex.RightKeyCodeIdx))
             {
                 newPosition += myTrans.right * Speed * Time.deltaTime;
             }
             
-            if (Input.GetKey(fightInput.leftKey))
+            if (fightInput.IsKey(KeyCodeIndex.LeftKeyCodeIdx))
             {
                 sprinting = false;
                 newPosition -= myTrans.right * Speed * Time.deltaTime;
@@ -60,13 +60,13 @@ public class Move : MonoBehaviour
         }
         else if (myTrans.right.x < 0)
         {
-            if (fightInput.leftDoubleKeyDownCache.CacheKeyCodes.Length == 2) sprinting = true;
-            if (Input.GetKey(fightInput.leftKey))
+            if (fightInput.IsDoubleKeyDown(KeyCodeIndex.LeftKeyCodeIdx)) sprinting = true;
+            if (fightInput.IsKey(KeyCodeIndex.LeftKeyCodeIdx))
             {
                 newPosition += myTrans.right * Speed * Time.deltaTime;
             }
-
-            if (Input.GetKey(fightInput.rightKey))
+            
+            if (fightInput.IsKey(KeyCodeIndex.RightKeyCodeIdx))
             {
                 sprinting = false;
                 newPosition -= myTrans.right * Speed * Time.deltaTime;

@@ -57,42 +57,42 @@ public class InputTest : MonoBehaviour
         //}
 
 
-        if (fightInput.IsKey(fightInput.upKey) && fightInput.IsDoubleKeyDown(fightInput.upKey))
-        {
-            thisTransform.position += thisTransform.up * 2f * Time.deltaTime;
-            Debug.Log("Do UpDoubleDown " + Time.time);
-        }
-        else if (fightInput.IsKey(fightInput.upKey))
-        {
-            thisTransform.position += thisTransform.up * 0.5f * Time.deltaTime;
-            //Debug.Log("Do UpDown " + Time.time);
-        }
-        if (fightInput.IsKey(fightInput.downKey) && fightInput.IsDoubleKeyDown(fightInput.downKey))
-        {
-            thisTransform.position -= thisTransform.up * 2f * Time.deltaTime;
-            Debug.Log("Do DownDoubleDown " + Time.time);
-        }
-        else if (fightInput.IsKey(fightInput.downKey))
-        {
-            thisTransform.position -= thisTransform.up * 0.5f * Time.deltaTime;
-            //Debug.Log("Do UpDown " + Time.time);
-        }
+        //if (fightInput.IsKey(fightInput.upKey) && fightInput.IsDoubleKeyDown(fightInput.upKey))
+        //{
+        //    thisTransform.position += thisTransform.up * 2f * Time.deltaTime;
+        //    Debug.Log("Do UpDoubleDown " + Time.time);
+        //}
+        //else if (fightInput.IsKey(fightInput.upKey))
+        //{
+        //    thisTransform.position += thisTransform.up * 0.5f * Time.deltaTime;
+        //    //Debug.Log("Do UpDown " + Time.time);
+        //}
+        //if (fightInput.IsKey(fightInput.downKey) && fightInput.IsDoubleKeyDown(fightInput.downKey))
+        //{
+        //    thisTransform.position -= thisTransform.up * 2f * Time.deltaTime;
+        //    Debug.Log("Do DownDoubleDown " + Time.time);
+        //}
+        //else if (fightInput.IsKey(fightInput.downKey))
+        //{
+        //    thisTransform.position -= thisTransform.up * 0.5f * Time.deltaTime;
+        //    //Debug.Log("Do UpDown " + Time.time);
+        //}
 
-        KeyCode[] baseSkillKeyCodes = { fightInput.baseSkillKey1, fightInput.baseSkillKey2 };
-        if (fightInput.IsKeyDown(baseSkillKeyCodes))
-        {
-            Debug.Log("Do baseSkillKey1 + 2 (fightInput)");
-        }
-        //else 
-        if (fightInput.IsKeyDown(fightInput.baseSkillKey1))
-        {
-            Debug.Log("Do baseSkillKey1 (fightInput)");
-        }
-        //else 
-        if (fightInput.IsKeyDown(fightInput.baseSkillKey2))
-        {
-            Debug.Log("Do baseSkillKey2 (fightInput)");
-        }
+        //KeyCode[] baseSkillKeyCodes = { fightInput.baseSkillKey1, fightInput.baseSkillKey2 };
+        //if (fightInput.IsKeyDown(baseSkillKeyCodes))
+        //{
+        //    Debug.Log("Do baseSkillKey1 + 2 (fightInput)");
+        //}
+        ////else 
+        //if (fightInput.IsKeyDown(fightInput.baseSkillKey1))
+        //{
+        //    Debug.Log("Do baseSkillKey1 (fightInput)");
+        //}
+        ////else 
+        //if (fightInput.IsKeyDown(fightInput.baseSkillKey2))
+        //{
+        //    Debug.Log("Do baseSkillKey2 (fightInput)");
+        //}
 
         if (Input.GetKeyDown(fightInput.baseSkillKey1) && Input.GetKeyDown(fightInput.baseSkillKey2))
         {

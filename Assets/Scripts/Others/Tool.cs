@@ -78,6 +78,14 @@ public class Tool
         return ret;
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="item"></param>
+    /// <param name="sourceArray"></param>
+    /// <param name="increaseLength">是否增加数组长度</param>
+    /// <returns></returns>
     public static T[] Prepend<T>(T item, T[] sourceArray, bool increaseLength)
     {
         T[] retArray = new T[1] { item };
@@ -95,6 +103,14 @@ public class Tool
         return retArray;
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="item"></param>
+    /// <param name="sourceArray"></param>
+    /// <param name="increaseLength">是否增加数组长度</param>
+    /// <returns></returns>
     public static T[] Append<T>(T item, T[] sourceArray, bool increaseLength)
     {
         T[] retArray = new T[1] { item };
@@ -152,5 +168,114 @@ public class Tool
         List<T> resultList = new List<T>(sourceArray);
         resultList.Sort(comparison);
         return resultList.ToArray();
+    }
+
+    public static GameObject RecursionFindGameObject(Transform rootTrans, string gameObjectName)
+    {
+        if (rootTrans == null) return null;
+        GameObject resultGO = null;
+
+        for (int i = 0; i < rootTrans.childCount; i++)
+        {
+            Transform childTrans = rootTrans.GetChild(i);
+            resultGO = RecursionFindGameObject(childTrans, gameObjectName);
+            if (resultGO != null) break;
+            if (childTrans.name.Equals(gameObjectName))
+            {
+                resultGO = childTrans.gameObject;
+                break;
+            }
+        }
+        return resultGO;
+    }
+
+    public static GameObject[] RecursionFindGameObjects(Transform rootTrans, string gameObjectName)
+    {
+        if (rootTrans == null) return null;
+        List<GameObject> resultGOList = new List<GameObject>();
+
+        for(int i = 0; i < rootTrans.childCount; i++)
+        {
+            Transform childTrans = rootTrans.GetChild(i);
+            resultGOList.AddRange(RecursionFindGameObjects(childTrans, gameObjectName));
+            if (childTrans.name.Equals(gameObjectName))
+            {
+                resultGOList.Add(childTrans.gameObject);
+            }
+        }
+        return resultGOList.ToArray();
+    }
+
+    public static GameObject RecursionFindParentGameObjectByName(Transform startTrans, string gameObjectName)
+    {
+        if (startTrans == null) return null;
+        GameObject resultGO = null;
+        Transform parentTrans = startTrans.parent;
+        if(parentTrans != null)
+        {
+            if (parentTrans.name.Equals(gameObjectName))
+            {
+                resultGO = parentTrans.gameObject;
+            }
+            else
+            {
+                resultGO = RecursionFindParentGameObjectByName(parentTrans, gameObjectName);
+            }
+        }
+        return resultGO;
+    }
+
+    public static GameObject RecursionFindParentGameObjectByTag(Transform startTrans, string tag)
+    {
+        if (startTrans == null) return null;
+        GameObject resultGO = null;
+        Transform parentTrans = startTrans.parent;
+        if (parentTrans != null)
+        {
+            if (parentTrans.name.Equals(tag))
+            {
+                resultGO = parentTrans.gameObject;
+            }
+            else
+            {
+                resultGO = RecursionFindParentGameObjectByTag(parentTrans, tag);
+            }
+        }
+        return resultGO;
+    }
+
+    public static RaycastHit2D[] RaycastAll2D(Vector2 origin, Vector2 direction, float distance, float halfWidthOrHeight, int oneBorderRayNum, int layerMask)
+    {
+        List<RaycastHit2D> resultHit2DList = new List<RaycastHit2D>();
+        if (oneBorderRayNum < 2) oneBorderRayNum = 2;
+
+        int maxIdx = oneBorderRayNum - 1;
+        for (int i = 0; i < oneBorderRayNum; i++)
+        {
+            float offset = Mathf.Lerp(0, halfWidthOrHeight, i / maxIdx);
+            Vector2 l = Quaternion.AngleAxis(90f, Vector3.forward) * direction;
+            Vector2 tempOrigin = origin + l * offset;
+            resultHit2DList.AddRange(Physics2D.RaycastAll(tempOrigin, direction, distance, layerMask));
+            //Debug.DrawLine(tempOrigin, tempOrigin + (direction * distance), Color.yellow, 2);
+            tempOrigin = origin - l * offset;
+            resultHit2DList.AddRange(Physics2D.RaycastAll(tempOrigin, direction, distance, layerMask));
+            //Debug.DrawLine(tempOrigin, tempOrigin + (direction * distance), Color.yellow, 2);
+        }
+
+        return resultHit2DList.ToArray();
+    }
+
+    public static bool IsCheck(RaycastHit2D[] hit2Ds)
+    {
+        bool result = false;
+        foreach (RaycastHit2D tempHit2D in hit2Ds)
+        {
+            result = result || (tempHit2D.transform != null);
+            if (result)
+            {
+                break;
+            }
+        }
+        return result;
     }
 }
