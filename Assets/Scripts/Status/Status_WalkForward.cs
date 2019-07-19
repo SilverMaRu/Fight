@@ -7,49 +7,67 @@ public class Status_WalkForward : Status
     public float walkSpeed;
 
     private Transform rootTrans;
-    private FightInput input;
+    private Collider2D coll;
+    private int layerSize = -1;
+    private bool queriesStartInCollidersMark = true;
 
     public Status_WalkForward(GameObject rootGO, StatusManager statusManager, Animator anim) : base(rootGO, statusManager, anim)
     {
         rootTrans = this.rootGO.transform;
-        input = myStatusManager.fightInput;
+        coll = this.rootGO.GetComponent<Collider2D>();
 
-        animBoolName = "Forward";
+        layerSize = LayerMask.NameToLayer("Size");
+
+        statusName = "WalkForward";
         walkSpeed = 2;
     }
 
     public override bool MeetEnterCondition()
     {
-        return (rootTrans.right.x > 0 && input.IsKey(KeyCodeIndex.RightKeyCodeIdx))
-            || (rootTrans.right.x < 0 && input.IsKey(KeyCodeIndex.LeftKeyCodeIdx))
-            ;
-    }
-
-    public override bool MeetExitCondition()
-    {
-        return rootTrans.right.x > 0 && input.IsKeyUp(KeyCodeIndex.RightKeyCodeIdx)
-            || rootTrans.right.x < 0 && input.IsKeyUp(KeyCodeIndex.LeftKeyCodeIdx)
+        return base.MeetEnterCondition()
+            && ((rootTrans.right.x > 0 && input.IsKey(KeyCodeIndex.RightKeyCodeIdx))
+            || (rootTrans.right.x < 0 && input.IsKey(KeyCodeIndex.LeftKeyCodeIdx)))
             ;
     }
 
     public override void EnterStatus()
     {
         base.EnterStatus();
+        queriesStartInCollidersMark = Physics2D.queriesStartInColliders;
+        Physics2D.queriesStartInColliders = false;
+    }
+
+    public override bool MeetExitCondition()
+    {
+        return base.MeetExitCondition()
+            || (rootTrans.right.x > 0 && !input.IsKey(KeyCodeIndex.RightKeyCodeIdx)
+            || rootTrans.right.x < 0 && !input.IsKey(KeyCodeIndex.LeftKeyCodeIdx))
+            ;
     }
 
     public override void ExitStatus()
     {
         base.ExitStatus();
+        Physics2D.queriesStartInColliders = queriesStartInCollidersMark;
     }
 
     public override void Update()
     {
         base.Update();
-        Vector3 newPosition = rootTrans.position;
-        newPosition += rootTrans.right * walkSpeed * Time.deltaTime;
-        if (!Tool.IsOutOfCameraX(newPosition.x))
+
+        Bounds bounds = coll.bounds;
+        Vector3 extents = bounds.extents;
+        Vector3 right = rootTrans.right;
+
+        RaycastHit2D[] hit2Ds = Tool.RaycastAll2D(bounds.center, right, extents.x, extents.y, 5, LayerHelper.GetLayerMask(layerSize, true));
+        if (!Tool.IsCheck(hit2Ds))
         {
-            rootTrans.position = newPosition;
+            Vector3 newPosition = rootTrans.position;
+            newPosition += right * walkSpeed * Time.deltaTime;
+            if (!Tool.IsOutOfCameraX(newPosition.x, -coll.bounds.extents.x))
+            {
+                rootTrans.position = newPosition;
+            }
         }
     }
 }

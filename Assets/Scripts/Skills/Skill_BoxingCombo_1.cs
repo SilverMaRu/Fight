@@ -2,21 +2,46 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Skill_BoxingCombo_1 : Skill_2
+public class Skill_BoxingCombo_1 : NormalSkill
 {
+    private int layerHurtOnly;
+    private int layerAttackOnly;
+
     public Skill_BoxingCombo_1(GameObject rootGO, SkillManager skillManager, Animator anim) : base(rootGO, skillManager, anim)
     {
-        info = new SpawSkillInfo();
-        info.orderKeyCodeIdxs = new int[] { (int)KeyCodeIndex.BaseSkillKeyCodeIdx1 };
-        info.deriveSkillTypeNames = new string[] { typeof(Skill_BoxingCombo_2).Name };
-        info.hitDetectionGameObjectNames = new string[] { "LeftLowerArm" };
-
-        orderKeyCodeIdxs = IntToKeyCodeIndex(info.orderKeyCodeIdxs);
-        hitDetectionGOs = FindAttackGameObjects(info.hitDetectionGameObjectNames);
+        layerHurtOnly = LayerMask.NameToLayer("HurtOnly");
+        layerAttackOnly = LayerMask.NameToLayer("AttackOnly");
     }
 
     public override bool MeetEnterCondition()
     {
-        return input.IsKeyDown(orderKeyCodeIdxs);
+        return base.MeetEnterCondition() && input.IsKeyDown(orderKeyCodeIdxs);
+    }
+
+    public override void EnableInfluence(string influenceGOName)
+    {
+        GameObject attackGO = GetInfluencePartGameObjcet(influenceGOName);
+        if (attackGO != null)
+        {
+            Part attackPart = attackGO.GetComponent<Part>();
+            if (attackPart != null)
+            {
+                attackPart.ResetHitGameObjectList();
+                attackPart.UpgradeLayer();
+            }
+        }
+    }
+
+    public override void DisableInfluence(string influenceGOName)
+    {
+        GameObject attackGO = GetInfluencePartGameObjcet(influenceGOName);
+        if (attackGO != null)
+        {
+            Part attackPart = attackGO.GetComponent<Part>();
+            if (attackPart != null)
+            {
+                attackPart.DowngradeLayer();
+            }
+        }
     }
 }

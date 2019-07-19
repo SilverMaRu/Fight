@@ -6538,14 +6538,14 @@ AnimationClip:
   m_HasMotionFloatCurves: 0
   m_Events:
   - time: 0
-    functionName: OpenAttackDecision
+    functionName: EnableInfluence
     data: LeftLowerArm
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0
     intParameter: 0
     messageOptions: 0
   - time: 0.1
-    functionName: ClossAttackDecision
+    functionName: DisableInfluence
     data: LeftLowerArm
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0

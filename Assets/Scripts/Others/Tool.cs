@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class Tool
 {
+    public static Vector3 flatXZ = Vector3.right + Vector3.forward;
+    public static Vector3 flatXY = Vector3.right + Vector3.up;
+    public static Vector3 flatYZ = Vector3.up + Vector3.forward;
 
     private static GameObject camera;
     private static Vector3 cameraScale = Vector3.zero;
@@ -13,6 +16,8 @@ public class Tool
         bool ret = true;
         float deltaX = positionX - Camera.main.transform.position.x;
         float limitDistanceX = GetCameraScale().x * .5f + offset;
+        //Debug.DrawLine(Vector3.Scale(GetCamera().transform.position, flatXY) + limitDistanceX * Vector3.right, Vector3.Scale(GetCamera().transform.position, flatXY) + limitDistanceX * Vector3.right + GetCameraScale().y * Vector3.up, Color.blue);
+        //Debug.DrawLine(Vector3.Scale(GetCamera().transform.position, flatXY) + limitDistanceX * Vector3.right, Vector3.Scale(GetCamera().transform.position, flatXY) + limitDistanceX * Vector3.right - GetCameraScale().y * Vector3.up, Color.blue);
         ret = deltaX * deltaX > limitDistanceX * limitDistanceX;
         return ret;
     }
@@ -194,7 +199,7 @@ public class Tool
         if (rootTrans == null) return null;
         List<GameObject> resultGOList = new List<GameObject>();
 
-        for(int i = 0; i < rootTrans.childCount; i++)
+        for (int i = 0; i < rootTrans.childCount; i++)
         {
             Transform childTrans = rootTrans.GetChild(i);
             resultGOList.AddRange(RecursionFindGameObjects(childTrans, gameObjectName));
@@ -211,7 +216,7 @@ public class Tool
         if (startTrans == null) return null;
         GameObject resultGO = null;
         Transform parentTrans = startTrans.parent;
-        if(parentTrans != null)
+        if (parentTrans != null)
         {
             if (parentTrans.name.Equals(gameObjectName))
             {
@@ -252,14 +257,15 @@ public class Tool
         int maxIdx = oneBorderRayNum - 1;
         for (int i = 0; i < oneBorderRayNum; i++)
         {
-            float offset = Mathf.Lerp(0, halfWidthOrHeight, i / maxIdx);
+            float t = i / (float)maxIdx;
+            float offset = Mathf.Lerp(0, halfWidthOrHeight, t);
             Vector2 l = Quaternion.AngleAxis(90f, Vector3.forward) * direction;
             Vector2 tempOrigin = origin + l * offset;
             resultHit2DList.AddRange(Physics2D.RaycastAll(tempOrigin, direction, distance, layerMask));
-            //Debug.DrawLine(tempOrigin, tempOrigin + (direction * distance), Color.yellow, 2);
+            Debug.DrawLine(tempOrigin, tempOrigin + (direction * distance), Color.yellow, 2);
             tempOrigin = origin - l * offset;
             resultHit2DList.AddRange(Physics2D.RaycastAll(tempOrigin, direction, distance, layerMask));
-            //Debug.DrawLine(tempOrigin, tempOrigin + (direction * distance), Color.yellow, 2);
+            Debug.DrawLine(tempOrigin, tempOrigin + (direction * distance), Color.yellow, 2);
         }
 
         return resultHit2DList.ToArray();

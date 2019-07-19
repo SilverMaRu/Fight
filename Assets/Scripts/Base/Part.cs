@@ -4,12 +4,19 @@ using UnityEngine;
 
 public class Part : MonoBehaviour
 {
+    public delegate void BeHurtHandler(GameObject rootGO, Part beHurtPart);
+    public static event BeHurtHandler BeHurtEvent;
+
+    private List<GameObject> hitRootGOList = new List<GameObject>();
+
     // 攻击力
     public float attack;
     // 防御力
     public float defense;
     public GameObject rootGO;
     public string PartName { get; private set; }
+    //[HideInInspector]
+    public bool block = false;
     private int layerHurtOnly = -1;
     private int layerAttackOnly = -1;
 
@@ -17,13 +24,27 @@ public class Part : MonoBehaviour
     void Start()
     {
         PartName = gameObject.name;
-        layerHurtOnly = LayerHelper.GetLayer("HurtOnly");
-        layerAttackOnly = LayerHelper.GetLayer("AttackOnly");
+        layerHurtOnly = LayerMask.NameToLayer("HurtOnly");
+        layerAttackOnly = LayerMask.NameToLayer("AttackOnly");
     }
 
-    public void Hurt(float damage)
+    public void Hurt(Part attackPart)
     {
-        Debug.Log("Be Hurt, Damage: " + damage);
+        if (block)
+        {
+
+        }
+        else
+        {
+            Debug.Log("attackPart.Name = " + attackPart.name);
+            Debug.Log("beHurtPart.Name = " + name);
+            float damage = attackPart.attack - defense;
+
+            if (LayerHasHurt() && damage >= 0)
+            {
+                BeHurtEvent(rootGO, this);
+            }
+        }
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -31,9 +52,14 @@ public class Part : MonoBehaviour
         if (LayerHasAttack())
         {
             Part hitPart = collision.GetComponent<Part>();
-            if (hitPart != null && !hitPart.rootGO.Equals(rootGO))
+            if (hitPart != null)
             {
-                hitPart.Hurt(attack);
+                GameObject hitRootGO = hitPart.rootGO;
+                if (!hitRootGO.Equals(rootGO) && !hitRootGOList.Contains(hitRootGO))
+                {
+                    hitPart.Hurt(this);
+                    hitRootGOList.Add(hitPart.rootGO);
+                }
             }
         }
     }
@@ -48,5 +74,24 @@ public class Part : MonoBehaviour
     {
         int myLayer = gameObject.layer;
         return myLayer > layerHurtOnly && myLayer <= layerAttackOnly;
+    }
+
+    public void UpgradeLayer(int level = 1)
+    {
+        level = Mathf.Abs(level);
+        int newLayer = gameObject.layer + level;
+        gameObject.layer = Mathf.Clamp(newLayer, layerHurtOnly, layerAttackOnly);
+    }
+
+    public void DowngradeLayer(int level = 1)
+    {
+        level = Mathf.Abs(level);
+        int newLayer = gameObject.layer - level;
+        gameObject.layer = Mathf.Clamp(newLayer, layerHurtOnly, layerAttackOnly);
+    }
+
+    public void ResetHitGameObjectList()
+    {
+        hitRootGOList.Clear();
     }
 }

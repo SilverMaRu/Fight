@@ -8,6 +8,7 @@ public class LookAt : MonoBehaviour
     public Transform targetTrans;
 
     private Transform myTrans;
+    private System.Type forwardAvoid = typeof(Skill_ForwardAvoid);
 
     // Start is called before the first frame update
     void Start()
@@ -21,6 +22,9 @@ public class LookAt : MonoBehaviour
                 targetTrans = otherPlayerGO.transform;
             }
         }
+
+        Skill.EnterSkillEvent += OnEnterSkill;
+        Skill.ExitSkillEvent += OnExitSkill;
     }
 
     // Update is called once per frame
@@ -51,6 +55,22 @@ public class LookAt : MonoBehaviour
             Vector3 myToEnemyNormalized = enemyTrans.position - myTrans.position;
             myToEnemyNormalized = Vector3.Scale(myToEnemyNormalized, Vector3.right).normalized;
             myTrans.right = myToEnemyNormalized.normalized;
+        }
+    }
+
+    private void OnEnterSkill(GameObject useGO, Skill useSkill)
+    {
+        if (useSkill.GetType().Equals(forwardAvoid))
+        {
+            enabled = false;
+        }
+    }
+
+    private void OnExitSkill(GameObject useGO, Skill useSkill)
+    {
+        if (useSkill.GetType().Equals(forwardAvoid))
+        {
+            enabled = true;
         }
     }
 }

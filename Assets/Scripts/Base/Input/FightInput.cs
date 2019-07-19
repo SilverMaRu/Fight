@@ -5,16 +5,17 @@ using UnityEngine;
 
 public class FightInput : MonoBehaviour
 {
-    public KeyCode upKey = KeyCode.W;
-    public KeyCode downKey = KeyCode.S;
-    public KeyCode leftKey = KeyCode.A;
-    public KeyCode rightKey = KeyCode.D;
-    public KeyCode baseSkillKey1 = KeyCode.J;
-    public KeyCode baseSkillKey2 = KeyCode.K;
-    public KeyCode baseSkillKey3 = KeyCode.L;
-    public KeyCode baseSkillKey4 = KeyCode.U;
-    public KeyCode baseSkillKey5 = KeyCode.I;
-    public KeyCode baseSkillKey6 = KeyCode.O;
+    //public KeyCode upKey = KeyCode.W;
+    //public KeyCode downKey = KeyCode.S;
+    //public KeyCode leftKey = KeyCode.A;
+    //public KeyCode rightKey = KeyCode.D;
+    //public KeyCode baseSkillKey1 = KeyCode.J;
+    //public KeyCode baseSkillKey2 = KeyCode.K;
+    //public KeyCode baseSkillKey3 = KeyCode.L;
+    //public KeyCode baseSkillKey4 = KeyCode.U;
+    //public KeyCode baseSkillKey5 = KeyCode.I;
+    //public KeyCode baseSkillKey6 = KeyCode.O;
+    public PlayerInputInfo inputInfo;
     private KeyCode[] allKeyCodes;
 
     public KeyCache upDoubleKeyDownCache;
@@ -31,20 +32,20 @@ public class FightInput : MonoBehaviour
 
     private Dictionary<KeyCode, KeyCache> codeCachePairs = new Dictionary<KeyCode, KeyCache>();
 
-    private void Awake()
+    private void Start()
     {
         allKeyCodes = new KeyCode[(int)KeyCodeIndex.KeyCodeLength];
-        allKeyCodes[(int)KeyCodeIndex.UpKeyCodeIdx] = upKey;
-        allKeyCodes[(int)KeyCodeIndex.DownKeyCodeIdx] = downKey;
-        allKeyCodes[(int)KeyCodeIndex.LeftKeyCodeIdx] = leftKey;
-        allKeyCodes[(int)KeyCodeIndex.RightKeyCodeIdx] = rightKey;
-        allKeyCodes[(int)KeyCodeIndex.BaseSkillKeyCodeIdx1] = baseSkillKey1;
-        allKeyCodes[(int)KeyCodeIndex.BaseSkillKeyCodeIdx2] = baseSkillKey2;
-        allKeyCodes[(int)KeyCodeIndex.BaseSkillKeyCodeIdx3] = baseSkillKey3;
-        allKeyCodes[(int)KeyCodeIndex.BaseSkillKeyCodeIdx4] = baseSkillKey4;
-        allKeyCodes[(int)KeyCodeIndex.BaseSkillKeyCodeIdx5] = baseSkillKey5;
-        allKeyCodes[(int)KeyCodeIndex.BaseSkillKeyCodeIdx6] = baseSkillKey6;
-        
+        allKeyCodes[(int)KeyCodeIndex.UpKeyCodeIdx] = inputInfo.upKey;
+        allKeyCodes[(int)KeyCodeIndex.DownKeyCodeIdx] = inputInfo.downKey;
+        allKeyCodes[(int)KeyCodeIndex.LeftKeyCodeIdx] = inputInfo.leftKey;
+        allKeyCodes[(int)KeyCodeIndex.RightKeyCodeIdx] = inputInfo.rightKey;
+        allKeyCodes[(int)KeyCodeIndex.BaseSkillKeyCodeIdx1] = inputInfo.baseSkillKey1;
+        allKeyCodes[(int)KeyCodeIndex.BaseSkillKeyCodeIdx2] = inputInfo.baseSkillKey2;
+        allKeyCodes[(int)KeyCodeIndex.BaseSkillKeyCodeIdx3] = inputInfo.baseSkillKey3;
+        allKeyCodes[(int)KeyCodeIndex.BaseSkillKeyCodeIdx4] = inputInfo.baseSkillKey4;
+        allKeyCodes[(int)KeyCodeIndex.BaseSkillKeyCodeIdx5] = inputInfo.baseSkillKey5;
+        allKeyCodes[(int)KeyCodeIndex.BaseSkillKeyCodeIdx6] = inputInfo.baseSkillKey6;
+
         KeyCode[] upKeyArray = GetKeyCodes(KeyCodeIndex.UpKeyCodeIdx);
         KeyCode[] downKeyArray = GetKeyCodes(KeyCodeIndex.DownKeyCodeIdx);
         KeyCode[] leftKeyArray = GetKeyCodes(KeyCodeIndex.LeftKeyCodeIdx);
@@ -68,16 +69,16 @@ public class FightInput : MonoBehaviour
         baseSkillKey6DouableKeyDownCache = new KeyCache(baseSkillKey6KeyArray, Time.deltaTime * 10, false);
         keysCache = new KeyCache(allKeyCodes, Time.deltaTime * 3, false, allKeyCodes.Length);
 
-        codeCachePairs.Add(upKey, upDoubleKeyDownCache);
-        codeCachePairs.Add(downKey, downDoubleKeyDownCache);
-        codeCachePairs.Add(leftKey, leftDoubleKeyDownCache);
-        codeCachePairs.Add(rightKey, rightDouableKeyDownCache);
-        codeCachePairs.Add(baseSkillKey1, baseSkillKey1DouableKeyDownCache);
-        codeCachePairs.Add(baseSkillKey2, baseSkillKey2DouableKeyDownCache);
-        codeCachePairs.Add(baseSkillKey3, baseSkillKey3DouableKeyDownCache);
-        codeCachePairs.Add(baseSkillKey4, baseSkillKey4DouableKeyDownCache);
-        codeCachePairs.Add(baseSkillKey5, baseSkillKey5DouableKeyDownCache);
-        codeCachePairs.Add(baseSkillKey6, baseSkillKey6DouableKeyDownCache);
+        codeCachePairs.Add(inputInfo.upKey, upDoubleKeyDownCache);
+        codeCachePairs.Add(inputInfo.downKey, downDoubleKeyDownCache);
+        codeCachePairs.Add(inputInfo.leftKey, leftDoubleKeyDownCache);
+        codeCachePairs.Add(inputInfo.rightKey, rightDouableKeyDownCache);
+        codeCachePairs.Add(inputInfo.baseSkillKey1, baseSkillKey1DouableKeyDownCache);
+        codeCachePairs.Add(inputInfo.baseSkillKey2, baseSkillKey2DouableKeyDownCache);
+        codeCachePairs.Add(inputInfo.baseSkillKey3, baseSkillKey3DouableKeyDownCache);
+        codeCachePairs.Add(inputInfo.baseSkillKey4, baseSkillKey4DouableKeyDownCache);
+        codeCachePairs.Add(inputInfo.baseSkillKey5, baseSkillKey5DouableKeyDownCache);
+        codeCachePairs.Add(inputInfo.baseSkillKey6, baseSkillKey6DouableKeyDownCache);
     }
 
     // Update is called once per frame
@@ -94,12 +95,6 @@ public class FightInput : MonoBehaviour
         baseSkillKey5DouableKeyDownCache.Reflash();
         baseSkillKey6DouableKeyDownCache.Reflash();
         keysCache.Reflash();
-    }
-
-    public bool IsKeyDown(params KeyCodeIndex[] keyCodeIdxs)
-    {
-        KeyCode[] keyCodes = GetKeyCodes(keyCodeIdxs);
-        return EqualsKeyCodes(Tool.Sort(keyCodes), Tool.Sort(keysCache.CacheDistinctKeyCodes));
     }
 
     private bool EqualsKeyCodes(KeyCode[] sortKeyCodes0, KeyCode[] sortKeyCodes1)
@@ -123,14 +118,32 @@ public class FightInput : MonoBehaviour
         return equals;
     }
 
-    public bool IsKey(KeyCodeIndex keyCodeIdx)
+    public bool IsKeyDown(params KeyCodeIndex[] keyCodeIdxs)
     {
-        return Input.GetKey(GetKeyCode(keyCodeIdx));
+        KeyCode[] keyCodes = GetKeyCodes(keyCodeIdxs);
+        return EqualsKeyCodes(Tool.Sort(keyCodes), Tool.Sort(keysCache.CacheDistinctKeyCodes));
     }
 
-    public bool IsKeyUp(KeyCodeIndex keyCodeIdx)
+    public bool IsKey(params KeyCodeIndex[] keyCodeIdxs)
     {
-        return Input.GetKeyUp(GetKeyCode(keyCodeIdx));
+        bool resultIsKey = true;
+        foreach(KeyCodeIndex tempKCI in keyCodeIdxs)
+        {
+            resultIsKey = resultIsKey && Input.GetKey(GetKeyCode(tempKCI));
+            if (!resultIsKey) break;
+        }
+        return resultIsKey;
+    }
+
+    public bool IsKeyUp(params KeyCodeIndex[] keyCodeIdxs)
+    {
+        bool resultIsKey = true;
+        foreach (KeyCodeIndex tempKCI in keyCodeIdxs)
+        {
+            resultIsKey = resultIsKey && Input.GetKeyUp(GetKeyCode(tempKCI));
+            if (!resultIsKey) break;
+        }
+        return resultIsKey;
     }
 
     public bool IsDoubleKeyDown(KeyCodeIndex keyCodeIdx)

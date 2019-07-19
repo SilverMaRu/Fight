@@ -1,54 +1,104 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
-public class Skill : MonoBehaviour
-{    
-    //public SkillInfo skilInfo;
-    public int skillID;
-    public string skillName;
-    public int healthRevise;
-    public int manaRevise;
-    public int strengthRevise;
-    public int attackRevise;
-    public int defenseRevise;
-    public int speedRevise;
+
+public class Skill
+{
+    public delegate void EnterSkillHandler(GameObject useGO, Skill useSkill);
+    public delegate void ExitSkillHandler(GameObject useGO, Skill useSkill);
+    public static event EnterSkillHandler EnterSkillEvent;
+    public static event ExitSkillHandler ExitSkillEvent;
+
+    private static Type[] skillTypes;
+    public static Type[] SkillTypes
+    {
+        get
+        {
+            Type[] resultArray = null;
+            if (skillTypes == null)
+            {
+                skillTypes = TypeHelper.GetSubclassesOf(typeof(Skill));
+            }
+            if(skillTypes != null)
+            {
+                resultArray = new Type[skillTypes.Length];
+                skillTypes.CopyTo(resultArray, 0);
+            }
+            return resultArray;
+        }
+    }
+
+    public SkillSpawInfo info;
     // 技能指令
     public KeyCodeIndex[] orderKeyCodeIdxs;
-    public string animTriggerName;
-    // 带攻击判定的游戏对象名称
-    public string[] hitDetectionGameObjectNames;
-    public Animator anim;
     // 前置技能
-    public Skill[] frontSkills;
+    public Skill[] frontSkills = new Skill[0];
     // 派生技能
-    public Skill[] deriveSkills;
+    public Skill[] deriveSkills = new Skill[0];
 
-    private GameObject[] hitDetectionGOs;
+    public bool onEnable = true;
+    public GameObject rootGO;
+    protected SkillManager mySkillManager;
+    protected Animator anim;
+    protected FightInput input;
+    protected GameObject[] influencePartGOs = new GameObject[0];
+    protected Type typeofROS = typeof(RestatsOnShields);
 
-    protected virtual void Awake()
+    public Skill(GameObject rootGO, SkillManager skillManager, Animator anim)
     {
-        if (anim == null)
+        this.rootGO = rootGO;
+        mySkillManager = skillManager;
+        this.anim = anim;
+        input = mySkillManager.fightInput;
+
+        info = LoadSpawSkillInfo();
+        if(info != null)
         {
-            anim = GetComponent<Animator>();
+            orderKeyCodeIdxs = info.orderKeyCodeIdxs;
+            influencePartGOs = FindGameObjects(info.influencedPartGameObjectNames);
         }
-        hitDetectionGOs = FindAttackGameObjects(hitDetectionGameObjectNames);
+    }
+
+    private SkillSpawInfo LoadSpawSkillInfo()
+    {
+        string name = GetType().Name + "_SpawInfo";
+        SkillSpawInfo resultInfo = Resources.Load<SkillSpawInfo>("SriptableObjects/SpawSkillInfo/" + name);
+        return resultInfo;
+    }
+
+    public virtual bool MeetEnterCondition()
+    {
+        return onEnable;
     }
 
     public virtual void EnterSkill()
     {
-        if (anim != null && !string.IsNullOrEmpty(animTriggerName)) anim.SetTrigger(animTriggerName);
+        if (mySkillManager == null) return;
+        if (Equals(mySkillManager.currentSkill)) return;
+        if (mySkillManager.currentSkill != null) mySkillManager.currentSkill.ExitSkill();
+        mySkillManager.listeningInput = false;
+        mySkillManager.currentSkill = this;
+        if (anim != null && !string.IsNullOrEmpty(info.skillName)) anim.SetTrigger(info.skillName);
+        EnterSkillEvent?.Invoke(rootGO, this);
+    }
+
+    public virtual void UpdateSkill()
+    {
     }
 
     public virtual void ExitSkill()
     {
-        //enabled = false;
+        if (mySkillManager != null) mySkillManager.currentSkill = null;
+        mySkillManager.listeningInput = true;
+        ExitSkillEvent?.Invoke(rootGO, this);
     }
 
-    public GameObject GetAttackGameObjcet(string gameObjectName)
+    public GameObject GetInfluencePartGameObjcet(string gameObjectName)
     {
         GameObject resultGO = null;
-        foreach (GameObject tempGO in hitDetectionGOs)
+        foreach (GameObject tempGO in influencePartGOs)
         {
             if (tempGO.name.Equals(gameObjectName))
             {
@@ -59,15 +109,70 @@ public class Skill : MonoBehaviour
         return resultGO;
     }
 
-    protected GameObject[] FindAttackGameObjects(string[] attackGameObjectNames)
+    protected GameObject[] FindGameObjects(string[] attackGameObjectNames)
     {
         int length = attackGameObjectNames.Length;
         GameObject[] resultGOArray = new GameObject[length];
-        Transform myTrans = transform;
-        for(int i = 0; i < length; i++)
+        Transform myTrans = rootGO.transform;
+        for (int i = 0; i < length; i++)
         {
             resultGOArray[i] = Tool.RecursionFindGameObject(myTrans, attackGameObjectNames[i]);
         }
         return resultGOArray;
     }
+
+    public void MatchFrontSkills(Skill[] skillPool)
+    {
+        if (info.frontSkillTypeNames == null) return;
+        List<Skill> frontSkillList = new List<Skill>(info.frontSkillTypeNames.Length);
+        foreach(string tempTypeName in info.frontSkillTypeNames)
+        {
+            if (string.IsNullOrEmpty(tempTypeName))
+            {
+                frontSkillList.Add(null);
+            }
+            else
+            {
+                foreach(Skill tempSkill in skillPool)
+                {
+                    if (tempTypeName.Equals(tempSkill.GetType().Name))
+                    {
+                        frontSkillList.Add(tempSkill);
+                    }
+                }
+            }
+        }
+        frontSkills = frontSkillList.ToArray();
+    }
+
+    public void MatchDeriveSkills(Skill[] skillPool)
+    {
+        if (info.deriveSkillTypeNames == null) return;
+        List<Skill> deriveSkillList = new List<Skill>(info.deriveSkillTypeNames.Length);
+        foreach (string tempTypeName in info.deriveSkillTypeNames)
+        {
+            foreach (Skill tempSkill in skillPool)
+            {
+                if (tempTypeName.Equals(tempSkill.GetType().Name))
+                {
+                    deriveSkillList.Add(tempSkill);
+                }
+            }
+        }
+        deriveSkills = deriveSkillList.ToArray();
+    }
+
+    public bool IsMyFrontSkill(Skill skill)
+    {
+        bool isMyFrontSkill = false;
+        foreach(Skill frontSkillItem in frontSkills)
+        {
+            isMyFrontSkill = isMyFrontSkill || skill == null && frontSkillItem == null || skill != null && skill.GetType().Name.Equals(frontSkillItem.GetType().Name);
+        }
+        return isMyFrontSkill;
+    }
+
+    public virtual void EnableInfluence(string influenceGOName) { }
+
+    public virtual void DisableInfluence(string influenceGOName) { }
 }

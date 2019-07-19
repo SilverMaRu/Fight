@@ -94,17 +94,17 @@ public class InputTest : MonoBehaviour
         //    Debug.Log("Do baseSkillKey2 (fightInput)");
         //}
 
-        if (Input.GetKeyDown(fightInput.baseSkillKey1) && Input.GetKeyDown(fightInput.baseSkillKey2))
-        {
-            Debug.Log("Do baseSkillKey1 + 2 (Input)");
-        }
-        if (Input.GetKeyDown(fightInput.baseSkillKey1))
-        {
-            Debug.Log("Do baseSkillKey1 (Input)");
-        }
-        if (Input.GetKeyDown(fightInput.baseSkillKey2))
-        {
-            Debug.Log("Do baseSkillKey2 (Input)");
-        }
+        //if (Input.GetKeyDown(fightInput.baseSkillKey1) && Input.GetKeyDown(fightInput.baseSkillKey2))
+        //{
+        //    Debug.Log("Do baseSkillKey1 + 2 (Input)");
+        //}
+        //if (Input.GetKeyDown(fightInput.baseSkillKey1))
+        //{
+        //    Debug.Log("Do baseSkillKey1 (Input)");
+        //}
+        //if (Input.GetKeyDown(fightInput.baseSkillKey2))
+        //{
+        //    Debug.Log("Do baseSkillKey2 (Input)");
+        //}
     }
 }

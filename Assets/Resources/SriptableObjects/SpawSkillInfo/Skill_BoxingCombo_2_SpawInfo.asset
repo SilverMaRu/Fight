@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e6bcc0b850969214bb22e26a43269913, type: 3}
+  m_Name: Skill_BoxingCombo_2_SpawInfo
+  m_EditorClassIdentifier: Assembly-CSharp::SpawSkillInfo
+  skillID: 10002
+  skillName: BoxingCombo_2
+  healthRevise: 0
+  manaRevise: 0
+  strengthRevise: 0
+  attackRevise: 0
+  defenseRevise: 0
+  speedRevise: 0
+  orderKeyCodeIdxs: 04000000
+  hitDetectionGameObjectNames:
+  - RightLowerArm
+  influencedPartGameObjectNames:
+  - RightLowerArm
+  frontSkillTypeNames:
+  - Skill_BoxingCombo_1
+  deriveSkillTypeNames: []

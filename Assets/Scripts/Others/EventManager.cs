@@ -7,7 +7,7 @@ public class EventManager
 {
     private static Action emptyAction = () => { };
     private static Dictionary<string, Delegate> eventNameDelegateParis = new Dictionary<string, Delegate>();
-    private static Dictionary<UnityEngine.Object, Delegate> objDelegatePairs = new Dictionary<UnityEngine.Object, Delegate>();
+    private static Dictionary<object, Delegate> objDelegatePairs = new Dictionary<object, Delegate>();
 
     /// <summary>
     /// 添加事件
@@ -15,7 +15,7 @@ public class EventManager
     /// <param name="obj"></param>
     /// <param name="eventName"></param>
     /// <param name="newDelegate"></param>
-    private static void AddDelegate(UnityEngine.Object obj, string eventName, Delegate newDelegate)
+    private static void AddDelegate(object obj, string eventName, Delegate newDelegate)
     {
         Delegate existingDelegate;
         //bool hasValue = eventNameDelegateParis.TryGetValue(eventName, out existingDelegate);
@@ -53,27 +53,27 @@ public class EventManager
         }
     }
 
-    public static void BindingEvent(UnityEngine.Object obj, string eventName, Action newAction)
+    public static void BindingEvent(object obj, string eventName, Action newAction)
     {
         AddDelegate(obj, eventName, newAction);
     }
 
-    public static void BindingEvent<T>(UnityEngine.Object obj, string eventName, Action<T> newAction)
+    public static void BindingEvent<T>(object obj, string eventName, Action<T> newAction)
     {
         AddDelegate(obj, eventName, newAction);
     }
 
-    public static void BindingEvent<T1, T2>(UnityEngine.Object obj, string eventName, Action<T1, T2> newAction)
+    public static void BindingEvent<T1, T2>(object obj, string eventName, Action<T1, T2> newAction)
     {
         AddDelegate(obj, eventName, newAction);
     }
 
-    public static void BindingEvent<T1, T2, T3>(UnityEngine.Object obj, string eventName, Action<T1, T2, T3> newAction)
+    public static void BindingEvent<T1, T2, T3>(object obj, string eventName, Action<T1, T2, T3> newAction)
     {
         AddDelegate(obj, eventName, newAction);
     }
 
-    public static void BindingEvent<T1, T2, T3, T4>(UnityEngine.Object obj, string eventName, Action<T1, T2, T3, T4> newAction)
+    public static void BindingEvent<T1, T2, T3, T4>(object obj, string eventName, Action<T1, T2, T3, T4> newAction)
     {
         AddDelegate(obj, eventName, newAction);
     }
@@ -222,7 +222,7 @@ public class EventManager
         RemoveDelegate(eventName, removeAction);
     }
 
-    public static void RemoveAction(UnityEngine.Object obj)
+    public static void RemoveAction(object obj)
     {
         Delegate existingDelegate;
         if (objDelegatePairs.TryGetValue(obj, out existingDelegate))

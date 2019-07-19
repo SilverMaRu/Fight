@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CameraContral : MonoBehaviour
+public class CameraController : MonoBehaviour
 {
     public Camera mainCamera;
     public float minSize;
