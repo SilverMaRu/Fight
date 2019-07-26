@@ -6,27 +6,32 @@ using UnityEngine.SceneManagement;
 public class SpawFighter : MonoBehaviour
 {
     private static Dictionary<Player, FighterSpawInfo> playerSelectedFightInfoPairs = new Dictionary<Player, FighterSpawInfo>();
+    private static Dictionary<Player, GameObject> playerFighterInsPairs = new Dictionary<Player, GameObject>();
     private GameObject fighterPrefab;
-
-    public static GameObject[] fighterGOIns;
 
     private void Awake()
     {
         TestSelet();
         fighterPrefab = Resources.Load<GameObject>("Prefabs/Fighter");
-        fighterGOIns = SpawFighters();
+        SpawFighters();
     }
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        //SceneManager.
-    }
+    //private void OnApplicationQuit()
+    //{
+    //    Debug.Log("Do OnApplicationQuit");
+    //    int length = playerSelectedFightInfoPairs.Count;
+    //    Player[] players = new Player[length];
+    //    playerSelectedFightInfoPairs.Keys.CopyTo(players, 0);
+    //    foreach (Player tempPlayer in players)
+    //    {
+    //        //PlayerInputInfo.SavePlayerInputConfig(tempPlayer);
+    //        Player.SavePlayerInputConfig(tempPlayer);
+    //    }
+    //}
 
-    public GameObject[] SpawFighters()
+    public void SpawFighters()
     {
         int dicCount = playerSelectedFightInfoPairs.Count;
-        List<GameObject> resultGOList = new List<GameObject>(dicCount);
         Player[] keys = new Player[dicCount];
         playerSelectedFightInfoPairs.Keys.CopyTo(keys, 0);
         FighterSpawInfo[] values = new FighterSpawInfo[dicCount];
@@ -36,7 +41,8 @@ public class SpawFighter : MonoBehaviour
         {
             Player thisPlayer = keys[i];
             FighterSpawInfo thisFighterInfo = values[i];
-            GameObject tempFighterGO = Instantiate(fighterPrefab);
+            Vector3 position = Vector3.right * (-3 + 6 * i);
+            GameObject tempFighterGO = Instantiate(fighterPrefab, position, Quaternion.identity);
             tempFighterGO.name = thisFighterInfo.fighterName;
 
             FightInput input = tempFighterGO.GetComponent<FightInput>();
@@ -44,10 +50,12 @@ public class SpawFighter : MonoBehaviour
 
             SkillManager tempFighterSkillManager = tempFighterGO.GetComponent<SkillManager>();
             tempFighterSkillManager.testSkillTypes = thisFighterInfo.skillTypeNames;
-            resultGOList.Add(tempFighterGO);
-        }
 
-        return resultGOList.ToArray();
+            FighterAttributesManager tempFighterAttrManager = tempFighterGO.GetComponent<FighterAttributesManager>();
+            tempFighterAttrManager.fighterAttr = thisFighterInfo.fighterAttr;
+
+            playerFighterInsPairs.Add(thisPlayer, tempFighterGO);
+        }
     }
 
     public static void SelectFighter(Player player, FighterSpawInfo selectedFighterInfo)
@@ -64,5 +72,12 @@ public class SpawFighter : MonoBehaviour
         {
             SelectFighter(players[i], fighterSpawInfos[i]);
         }
+    }
+
+    public static GameObject GetFighterIns(Player player)
+    {
+        GameObject result = null;
+        playerFighterInsPairs.TryGetValue(player, out result);
+        return result;
     }
 }

@@ -13,8 +13,18 @@ MonoBehaviour:
   m_Name: TestFighter_001_SpawInfo
   m_EditorClassIdentifier: 
   fighterName: TestFighter_001
+  fighterAttr:
+    baseHP: 100
+    baseRecoverHP: 0
+    baseMP: 100
+    baseRecoverMP: 1
+    baseSP: 100
+    baseRecoverSP: 0
+    baseAttack: 100
+    baseDefense: 100
+    baseSpeed: 100
   skillTypeNames:
-  - Skill_Block
+  - Skill_Defend
   - Skill_BoxingCombo_1
   - Skill_BoxingCombo_2
   - Skill_ForwardAvoid

@@ -5,16 +5,7 @@ using UnityEngine;
 
 public class FightInput : MonoBehaviour
 {
-    //public KeyCode upKey = KeyCode.W;
-    //public KeyCode downKey = KeyCode.S;
-    //public KeyCode leftKey = KeyCode.A;
-    //public KeyCode rightKey = KeyCode.D;
-    //public KeyCode baseSkillKey1 = KeyCode.J;
-    //public KeyCode baseSkillKey2 = KeyCode.K;
-    //public KeyCode baseSkillKey3 = KeyCode.L;
-    //public KeyCode baseSkillKey4 = KeyCode.U;
-    //public KeyCode baseSkillKey5 = KeyCode.I;
-    //public KeyCode baseSkillKey6 = KeyCode.O;
+    [HideInInspector]
     public PlayerInputInfo inputInfo;
     private KeyCode[] allKeyCodes;
 
@@ -79,6 +70,7 @@ public class FightInput : MonoBehaviour
         codeCachePairs.Add(inputInfo.baseSkillKey4, baseSkillKey4DouableKeyDownCache);
         codeCachePairs.Add(inputInfo.baseSkillKey5, baseSkillKey5DouableKeyDownCache);
         codeCachePairs.Add(inputInfo.baseSkillKey6, baseSkillKey6DouableKeyDownCache);
+        
     }
 
     // Update is called once per frame

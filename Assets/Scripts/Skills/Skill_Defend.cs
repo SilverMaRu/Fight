@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Skill_Block : NormalSkill
+public class Skill_Defend : NormalSkill
 {
-    public Skill_Block(GameObject rootGO, SkillManager skillManager, Animator anim) : base(rootGO, skillManager, anim)
+    public Skill_Defend(GameObject rootGO, SkillManager skillManager, Animator anim) : base(rootGO, skillManager, anim)
     {
     }
 
@@ -54,7 +54,7 @@ public class Skill_Block : NormalSkill
         //    }
         //}
         Part blockPart = blockGO.GetComponent<Part>();
-        blockPart.block = true;
+        blockPart.isDefend = true;
     }
 
     public override void DisableInfluence(string influenceGOName)
@@ -69,6 +69,6 @@ public class Skill_Block : NormalSkill
         //    }
         //}
         Part blockPart = blockGO.GetComponent<Part>();
-        blockPart.block = false;
+        blockPart.isDefend = false;
     }
 }

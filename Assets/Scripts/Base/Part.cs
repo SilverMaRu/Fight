@@ -2,10 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+public delegate void BeHurtHandler(GameObject rootGO, Part beHurtPart, float damage);
+public delegate void DefendSkillHandler(GameObject rootGO, Part defendPart, Skill defendSkill);
 public class Part : MonoBehaviour
 {
-    public delegate void BeHurtHandler(GameObject rootGO, Part beHurtPart);
     public static event BeHurtHandler BeHurtEvent;
+    public static event DefendSkillHandler DefendSkillEvent;
 
     private List<GameObject> hitRootGOList = new List<GameObject>();
 
@@ -16,7 +18,7 @@ public class Part : MonoBehaviour
     public GameObject rootGO;
     public string PartName { get; private set; }
     //[HideInInspector]
-    public bool block = false;
+    public bool isDefend = false;
     private int layerHurtOnly = -1;
     private int layerAttackOnly = -1;
 
@@ -30,9 +32,9 @@ public class Part : MonoBehaviour
 
     public void Hurt(Part attackPart)
     {
-        if (block)
+        if (isDefend)
         {
-
+            DefendSkillEvent?.Invoke(rootGO, this, null);
         }
         else
         {
@@ -42,7 +44,7 @@ public class Part : MonoBehaviour
 
             if (LayerHasHurt() && damage >= 0)
             {
-                BeHurtEvent(rootGO, this);
+                BeHurtEvent(rootGO, this, damage);
             }
         }
     }

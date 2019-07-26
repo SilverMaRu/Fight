@@ -175,7 +175,7 @@ public class Tool
         return resultList.ToArray();
     }
 
-    public static GameObject RecursionFindGameObject(Transform rootTrans, string gameObjectName)
+    public static GameObject FindGameObject(Transform rootTrans, string gameObjectName, bool includeInactive = false)
     {
         if (rootTrans == null) return null;
         GameObject resultGO = null;
@@ -183,9 +183,9 @@ public class Tool
         for (int i = 0; i < rootTrans.childCount; i++)
         {
             Transform childTrans = rootTrans.GetChild(i);
-            resultGO = RecursionFindGameObject(childTrans, gameObjectName);
+            resultGO = FindGameObject(childTrans, gameObjectName, includeInactive);
             if (resultGO != null) break;
-            if (childTrans.name.Equals(gameObjectName))
+            if ((includeInactive || !includeInactive && childTrans.gameObject.activeSelf) && childTrans.name.Equals(gameObjectName))
             {
                 resultGO = childTrans.gameObject;
                 break;
@@ -194,7 +194,7 @@ public class Tool
         return resultGO;
     }
 
-    public static GameObject[] RecursionFindGameObjects(Transform rootTrans, string gameObjectName)
+    public static GameObject[] FindGameObjects(Transform rootTrans, string gameObjectName, bool includeInactive = false)
     {
         if (rootTrans == null) return null;
         List<GameObject> resultGOList = new List<GameObject>();
@@ -202,8 +202,8 @@ public class Tool
         for (int i = 0; i < rootTrans.childCount; i++)
         {
             Transform childTrans = rootTrans.GetChild(i);
-            resultGOList.AddRange(RecursionFindGameObjects(childTrans, gameObjectName));
-            if (childTrans.name.Equals(gameObjectName))
+            resultGOList.AddRange(FindGameObjects(childTrans, gameObjectName, includeInactive));
+            if ((includeInactive || !includeInactive && childTrans.gameObject.activeSelf) && childTrans.name.Equals(gameObjectName))
             {
                 resultGOList.Add(childTrans.gameObject);
             }
@@ -211,7 +211,7 @@ public class Tool
         return resultGOList.ToArray();
     }
 
-    public static GameObject RecursionFindParentGameObjectByName(Transform startTrans, string gameObjectName)
+    public static GameObject FindParentGameObjectByName(Transform startTrans, string gameObjectName)
     {
         if (startTrans == null) return null;
         GameObject resultGO = null;
@@ -224,13 +224,13 @@ public class Tool
             }
             else
             {
-                resultGO = RecursionFindParentGameObjectByName(parentTrans, gameObjectName);
+                resultGO = FindParentGameObjectByName(parentTrans, gameObjectName);
             }
         }
         return resultGO;
     }
 
-    public static GameObject RecursionFindParentGameObjectByTag(Transform startTrans, string tag)
+    public static GameObject FindParentGameObjectByTag(Transform startTrans, string tag)
     {
         if (startTrans == null) return null;
         GameObject resultGO = null;
@@ -243,7 +243,7 @@ public class Tool
             }
             else
             {
-                resultGO = RecursionFindParentGameObjectByTag(parentTrans, tag);
+                resultGO = FindParentGameObjectByTag(parentTrans, tag);
             }
         }
         return resultGO;

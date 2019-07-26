@@ -2003,6 +2003,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1978423089594721421}
+  - component: {fileID: 5278545211022732931}
   - component: {fileID: 1978423089594721419}
   - component: {fileID: 1978423089594721456}
   - component: {fileID: 1978423089594721458}
@@ -2012,7 +2013,7 @@ GameObject:
   - component: {fileID: 1978423089594721463}
   - component: {fileID: 1978423089594721461}
   m_Layer: 10
-  m_Name: Player
+  m_Name: Fighter
   m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2034,6 +2035,28 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5278545211022732931
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1978423089594721420}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b58ad6ef68658574bb7b8b31e82dd0db, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  fighterAttr:
+    baseHP: 100
+    baseRecoverHP: 0
+    baseMP: 100
+    baseRecoverMP: 1
+    baseSP: 100
+    baseRecoverSP: 25
+    baseAttack: 100
+    baseDefense: 100
+    baseSpeed: 100
 --- !u!114 &1978423089594721419
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2046,16 +2069,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6478d90d8a43d944eae2b9cf11b3f026, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  upKey: 119
-  downKey: 115
-  leftKey: 97
-  rightKey: 100
-  baseSkillKey1: 106
-  baseSkillKey2: 107
-  baseSkillKey3: 108
-  baseSkillKey4: 117
-  baseSkillKey5: 105
-  baseSkillKey6: 111
+  inputInfo: {fileID: 0}
 --- !u!114 &1978423089594721456
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2083,6 +2097,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   listeningInput: 1
+  testSkillTypes:
+  - Skill_BoxingCombo_1
+  - Skill_BoxingCombo_2
+  - Skill_TestEscape
+  - Skill_Block
+  - Skill_ForwardAvoid
   anim: {fileID: 1978423089594721461}
   fightInput: {fileID: 1978423089594721419}
 --- !u!50 &1978423089594721416

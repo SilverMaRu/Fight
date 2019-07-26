@@ -13,7 +13,7 @@ public class SkillManager : MonoBehaviour
     public bool listeningInput = true;
     // 角色可用技能列表
     [HideInInspector]
-    public string[] testSkillTypes = new string[] { "Skill_BoxingCombo_1", "Skill_BoxingCombo_2", "Skill_TestEscape", "Skill_Block", "Skill_ForwardAvoid" };
+    public string[] testSkillTypes = new string[] { "Skill_BoxingCombo_1", "Skill_BoxingCombo_2", "Skill_TestEscape", "Skill_Defend", "Skill_ForwardAvoid" };
     // 当前技能
     [HideInInspector]
     public Skill currentSkill;

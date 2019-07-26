@@ -6,11 +6,6 @@ using UnityEngine;
 [System.Serializable]
 public class PlayerInputInfo : ScriptableObject
 {
-    public const string WithoutStreamingAssetsPath = "/Config/Input/";
-    public const string ConfigFileNameSuffix = ".config";
-    public const string PlayerInputInfoPath = "SriptableObjects/DefaultPlayerInputInfo/";
-    public const string DefaultFileName = "DefaultInputInfo";
-
     public KeyCode upKey = KeyCode.W;
     public KeyCode downKey = KeyCode.S;
     public KeyCode leftKey = KeyCode.A;
@@ -22,40 +17,72 @@ public class PlayerInputInfo : ScriptableObject
     public KeyCode baseSkillKey5 = KeyCode.I;
     public KeyCode baseSkillKey6 = KeyCode.O;
 
-    public static void SavePlayerInputConfig(int savePlayerIndex, PlayerInputInfo saveInfo)
+    public static string ToSaveData(object saveObj)
     {
-        string directory = Application.streamingAssetsPath + WithoutStreamingAssetsPath;
-        string defaultPlayerName = Player.DefaultPlayerName(savePlayerIndex);
-        string fileName = defaultPlayerName + ConfigFileNameSuffix;
-        string fullPath = directory + fileName;
-
-        System.Runtime.Serialization.Formatters.Binary.BinaryFormatter bf = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
-        System.IO.FileStream fs = System.IO.File.OpenWrite(fullPath);
-        bf.Serialize(fs, saveInfo);
-        fs.Flush();
-        fs.Close();
+        string lineFormat = "{0} = {1}\n";
+        string dataStr = string.Empty;
+        System.Type type = saveObj.GetType();
+        System.Reflection.FieldInfo[] fields = type.GetFields();
+        foreach (System.Reflection.FieldInfo tempFieldInfo in fields)
+        {
+            object value = tempFieldInfo.GetValue(saveObj);
+            if (tempFieldInfo.FieldType.IsEnum)
+            {
+                value = (int)tempFieldInfo.GetValue(saveObj);
+            }
+            dataStr += string.Format(lineFormat, tempFieldInfo.Name, value);
+        }
+        Debug.Log(dataStr);
+        return dataStr;
     }
 
-    public static PlayerInputInfo LoadPlayerInputConfig(int loadPlayerIndex)
+    public static T FromSaveData<T>(string saveData) where T : class, new()
     {
-        PlayerInputInfo resultInfo = null;
+        System.Type typeOfInt = typeof(int);
+        System.Type typeOfFloat = typeof(float);
+        System.Type typeOfString = typeof(string);
 
-        string directory = Application.streamingAssetsPath + WithoutStreamingAssetsPath;
-        string defaultPlayerName = Player.DefaultPlayerName(loadPlayerIndex);
-        string fileName = defaultPlayerName + ConfigFileNameSuffix;
-        string fullPath = directory + fileName;
+        T resultObj = new T();
+        System.Type objType = resultObj.GetType();
 
-        if (System.IO.File.Exists(fullPath))
+        string[] allLines = saveData.Split('\n');
+        System.Reflection.FieldInfo[] fields = objType.GetFields();
+        foreach (string line in allLines)
         {
-            System.IO.FileStream fs = System.IO.File.OpenRead(fullPath);
-            System.Runtime.Serialization.Formatters.Binary.BinaryFormatter bf = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
-            resultInfo = (PlayerInputInfo)bf.Deserialize(fs);
-            fs.Close();
+            string[] splitLine = line.Split('=');
+            if (splitLine.Length < 2) continue;
+            string fieldName = splitLine[0].Trim();
+            string value = splitLine[1].Trim();
+
+            int lastIndex = 0;
+            int length = fields.Length;
+            for (int i = 0; i < length; i++)
+            {
+                int thisIndex = i + lastIndex;
+                System.Reflection.FieldInfo thisField = fields[thisIndex];
+                if (thisField.Name.Equals(fieldName))
+                {
+                    System.Type fieldType = thisField.FieldType;
+                    if (fieldType.Equals(typeOfInt))
+                    {
+                        thisField.SetValue(resultObj, System.Convert.ToInt32(value));
+                    }
+                    else if (fieldType.Equals(typeOfFloat))
+                    {
+                        thisField.SetValue(resultObj, System.Convert.ToSingle(value));
+                    }
+                    else if (fieldType.Equals(typeOfString))
+                    {
+                        thisField.SetValue(resultObj, value);
+                    }
+                    else if (fieldType.IsEnum)
+                    {
+                        thisField.SetValue(resultObj, System.Enum.ToObject(fieldType, System.Convert.ToInt32(value)));
+                    }
+                    break;
+                }
+            }
         }
-        else
-        {
-            resultInfo = Resources.Load<PlayerInputInfo>(PlayerInputInfoPath + defaultPlayerName + DefaultFileName);
-        }
-        return resultInfo;
+        return resultObj;
     }
 }

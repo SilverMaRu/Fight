@@ -6,5 +6,6 @@ using UnityEngine;
 public class FighterSpawInfo : ScriptableObject
 {
     public string fighterName;
+    public FighterAttributes fighterAttr;
     public string[] skillTypeNames;
 }

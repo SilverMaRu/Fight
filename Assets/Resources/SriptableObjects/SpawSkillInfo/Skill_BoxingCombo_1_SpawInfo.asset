@@ -14,15 +14,23 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::SpawSkillInfo
   skillID: 10001
   skillName: BoxingCombo_1
-  healthRevise: 0
-  manaRevise: 0
-  strengthRevise: 0
+  useBaseHPMultiple: 0
+  useCurrentHPMultiple: 0
+  useHP: 5
+  useBaseMPMultiple: 0
+  useCurrentMPMultiple: 0
+  useMP: 0
+  useBaseSPMultiple: 0
+  useCurrentSPMultiple: 0
+  useSP: 5
+  attackReviseMultiple: 0
   attackRevise: 0
+  defenseReviseMultiple: 0
   defenseRevise: 0
+  speedReviseMultiple: 0
   speedRevise: 0
+  frontStatusTypeName: 
   orderKeyCodeIdxs: 04000000
-  hitDetectionGameObjectNames:
-  - LeftLowerArm
   influencedPartGameObjectNames:
   - LeftLowerArm
   frontSkillTypeNames: []

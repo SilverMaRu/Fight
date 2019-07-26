@@ -31,6 +31,30 @@ public class Skill
     }
 
     public SkillSpawInfo info;
+    // 生命值消耗量
+    public float HPConsumption
+    {
+        get
+        {
+            return attrManager.fighterAttr.baseHP * info.useBaseHPMultiple + attrManager.currentHP * info.useCurrentHPMultiple + info.useHP;
+        }
+    }
+    // 魔力值消耗量
+    public float MPConsumption
+    {
+        get
+        {
+            return attrManager.fighterAttr.baseMP * info.useBaseMPMultiple + attrManager.currentMP * info.useCurrentMPMultiple + info.useMP;
+        }
+    }
+    // 耐力值消耗量
+    public float SPConsumption
+    {
+        get
+        {
+            return attrManager.fighterAttr.baseSP * info.useBaseSPMultiple + attrManager.currentSP * info.useCurrentSPMultiple + info.useSP;
+        }
+    }
     // 技能指令
     public KeyCodeIndex[] orderKeyCodeIdxs;
     // 前置技能
@@ -43,6 +67,7 @@ public class Skill
     protected SkillManager mySkillManager;
     protected Animator anim;
     protected FightInput input;
+    protected FighterAttributesManager attrManager;
     protected GameObject[] influencePartGOs = new GameObject[0];
     protected Type typeofROS = typeof(RestatsOnShields);
 
@@ -52,6 +77,7 @@ public class Skill
         mySkillManager = skillManager;
         this.anim = anim;
         input = mySkillManager.fightInput;
+        attrManager = this.rootGO.GetComponent<FighterAttributesManager>();
 
         info = LoadSpawSkillInfo();
         if(info != null)
@@ -70,7 +96,11 @@ public class Skill
 
     public virtual bool MeetEnterCondition()
     {
-        return onEnable;
+        return onEnable
+            && attrManager.currentHP > HPConsumption
+            && attrManager.currentMP >= MPConsumption
+            && attrManager.currentSP >= SPConsumption
+            ;
     }
 
     public virtual void EnterSkill()
@@ -116,7 +146,7 @@ public class Skill
         Transform myTrans = rootGO.transform;
         for (int i = 0; i < length; i++)
         {
-            resultGOArray[i] = Tool.RecursionFindGameObject(myTrans, attackGameObjectNames[i]);
+            resultGOArray[i] = Tool.FindGameObject(myTrans, attackGameObjectNames[i]);
         }
         return resultGOArray;
     }
