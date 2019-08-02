@@ -1,0 +1,36 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e6bcc0b850969214bb22e26a43269913, type: 3}
+  m_Name: Skill_TimeScaleTest_SpawInfo
+  m_EditorClassIdentifier: 
+  skillID: 9003
+  skillName: TimeScaleTest
+  useBaseHPMultiple: 0
+  useCurrentHPMultiple: 0
+  useHP: 0
+  useBaseMPMultiple: 0
+  useCurrentMPMultiple: 0
+  useMP: 0
+  useBaseSPMultiple: 0
+  useCurrentSPMultiple: 0
+  useSP: 0
+  attackReviseMultiple: 0
+  attackRevise: 0
+  defenseReviseMultiple: 0
+  defenseRevise: 0
+  speedReviseMultiple: 0
+  speedRevise: 0
+  frontStatusTypeName: 
+  orderKeyCodeIdxs: 0700000008000000
+  influencedPartGameObjectNames: []
+  frontSkillTypeNames: []
+  deriveSkillTypeNames: []

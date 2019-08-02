@@ -5,7 +5,6 @@ using UnityEngine;
 public delegate void AttributesChangeHandler(float current, float max);
 public class FighterAttributesManager : MonoBehaviour
 {
-    private static Dictionary<GameObject, FighterAttributesManager> goAttrManagerPairs = new Dictionary<GameObject, FighterAttributesManager>();
     public event AttributesChangeHandler HPChangeEvent;
     public event AttributesChangeHandler MPChangeEvent;
     public event AttributesChangeHandler SPChangeEvent;
@@ -17,6 +16,7 @@ public class FighterAttributesManager : MonoBehaviour
     private BuffManager buffManager;
     [HideInInspector]
     public FighterAttributes fighterAttr;
+    private TimeScale localTimeScale;
 
     // 生命值
     private float _currentHP;
@@ -73,13 +73,13 @@ public class FighterAttributesManager : MonoBehaviour
 
         Part.BeHurtEvent += OnBeHurt;
         Skill.EnterSkillEvent += OnEnterSkill;
-
-        goAttrManagerPairs.Add(rootGO, this);
+        localTimeScale = GetComponent<TimeScale>();
     }
 
     private void LateUpdate()
     {
-        float deltaTime = Time.deltaTime;
+        //float deltaTime = Time.deltaTime;
+        float deltaTime = Time.deltaTime * localTimeScale.localTimeScaleRatio;
         if (recoverHP != 0 && currentHP < fighterAttr.baseHP && currentHP > 0)
         {
             currentHP += recoverHP * deltaTime;
@@ -96,9 +96,9 @@ public class FighterAttributesManager : MonoBehaviour
 
     public void ReflashCurrentAttr()
     {
-        currentHP = fighterAttr.baseHP;
-        currentMP = fighterAttr.baseMP;
-        currentSP = fighterAttr.baseSP;
+        _currentHP = fighterAttr.baseHP;
+        _currentMP = fighterAttr.baseMP;
+        _currentSP = fighterAttr.baseSP;
     }
 
     private void OnEnterSkill(GameObject useGO, Skill useSkill)

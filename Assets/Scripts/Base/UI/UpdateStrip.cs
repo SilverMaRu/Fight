@@ -13,6 +13,7 @@ public enum FlowMode
 
 public class UpdateStrip : MonoBehaviour
 {
+    public GameObject fighterIns;
     public Color maxColor;
     public Color middleColor;
     public Color minColor;
@@ -24,12 +25,14 @@ public class UpdateStrip : MonoBehaviour
     private Image fillImage;
     private Coroutine smoothRectTrans;
     private Coroutine smoothColor;
+    private TimeScale fighterTimeScale;
 
     // Start is called before the first frame update
     void Start()
     {
         currentPanelRectTrans = (RectTransform)transform.Find("CurrentPanel");
         fillImage = currentPanelRectTrans.Find("FillImage").GetComponentInChildren<Image>();
+        fighterTimeScale = fighterIns.GetComponent<TimeScale>();
     }
 
     public void OnChange(float current, float max)
@@ -92,7 +95,7 @@ public class UpdateStrip : MonoBehaviour
         float usedTime = 0;
         while (usedTime <= changeTime)
         {
-            usedTime += Time.deltaTime;
+            usedTime += Time.deltaTime * fighterTimeScale.localTimeScaleRatio;
             float t = usedTime / changeTime;
             currentPanelRectTrans.anchorMin = Vector2.Lerp(startMinAnchor, targetMinAnchor, t);
             currentPanelRectTrans.anchorMax = Vector2.Lerp(startMaxAnchor, targetMaxAnchor, t);
@@ -105,7 +108,7 @@ public class UpdateStrip : MonoBehaviour
         float usedTime = 0;
         while (usedTime <= changeTime)
         {
-            usedTime += Time.deltaTime;
+            usedTime += Time.deltaTime * fighterTimeScale.localTimeScaleRatio;
             float t = usedTime / changeTime;
             fillImage.color = Color.Lerp(startColor, targetColor, t);
             yield return null;

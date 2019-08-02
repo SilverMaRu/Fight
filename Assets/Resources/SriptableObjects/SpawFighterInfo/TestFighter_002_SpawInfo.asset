@@ -22,9 +22,10 @@ MonoBehaviour:
     baseRecoverSP: 25
     baseAttack: 100
     baseDefense: 100
-    baseSpeed: 100
+    baseSpeed: 2
   skillTypeNames:
   - Skill_Defend
   - Skill_BoxingCombo_1
   - Skill_BoxingCombo_2
   - Skill_ForwardAvoid
+  - Skill_TimeScaleTest

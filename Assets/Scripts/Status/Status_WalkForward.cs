@@ -4,12 +4,22 @@ using UnityEngine;
 
 public class Status_WalkForward : Status
 {
-    public float walkSpeed;
+    public float walkSpeed
+    {
+        get
+        {
+            float result = 0;
+            result = attrManager.speed * 2 * localTimeScale.localTimeScaleRatio;
+            return result;
+        }
+    }
 
     private Transform rootTrans;
     private Collider2D coll;
     private int layerSize = -1;
     private bool queriesStartInCollidersMark = true;
+    private FighterAttributesManager attrManager;
+    private TimeScale localTimeScale;
 
     public Status_WalkForward(GameObject rootGO, StatusManager statusManager, Animator anim) : base(rootGO, statusManager, anim)
     {
@@ -19,7 +29,8 @@ public class Status_WalkForward : Status
         layerSize = LayerMask.NameToLayer("Size");
 
         statusName = "WalkForward";
-        walkSpeed = 2;
+        attrManager = rootGO.GetComponent<FighterAttributesManager>();
+        localTimeScale = rootGO.GetComponent<TimeScale>();
     }
 
     public override bool MeetEnterCondition()

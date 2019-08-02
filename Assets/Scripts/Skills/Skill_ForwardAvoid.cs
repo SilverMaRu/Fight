@@ -5,6 +5,7 @@ using UnityEngine;
 public class Skill_ForwardAvoid : Skill
 {
     public float moveSpeed;
+    public float avoidTime;
 
     private Transform rootTrans;
     private Collider2D rootColl;
@@ -17,6 +18,7 @@ public class Skill_ForwardAvoid : Skill
     public Skill_ForwardAvoid(GameObject rootGO, SkillManager skillManager, Animator anim) : base(rootGO, skillManager, anim)
     {
         moveSpeed = 2f;
+        avoidTime = 0.75f;
 
         rootTrans = rootGO.transform;
         rootColl = rootGO.GetComponent<Collider2D>();
@@ -56,7 +58,7 @@ public class Skill_ForwardAvoid : Skill
         {
             rootTrans.position = newPosition;
         }
-        if (Time.time - enterTime > 0.75f)
+        if (Time.time - enterTime > avoidTime)
         {
             ExitSkill();
         }

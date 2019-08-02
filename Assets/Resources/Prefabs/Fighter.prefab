@@ -173,7 +173,7 @@ MonoBehaviour:
   attack: 0
   defense: 0
   rootGO: {fileID: 1978423089594721420}
-  block: 0
+  isDefend: 0
 --- !u!61 &1978423088129536812
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -394,7 +394,7 @@ MonoBehaviour:
   attack: 0
   defense: 0
   rootGO: {fileID: 1978423089594721420}
-  block: 0
+  isDefend: 0
 --- !u!61 &1978423088420809449
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -614,7 +614,7 @@ MonoBehaviour:
   attack: 0
   defense: 0
   rootGO: {fileID: 1978423089594721420}
-  block: 0
+  isDefend: 0
 --- !u!58 &1978423088475490106
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -784,7 +784,7 @@ MonoBehaviour:
   attack: 0
   defense: 0
   rootGO: {fileID: 1978423089594721420}
-  block: 0
+  isDefend: 0
 --- !u!61 &1978423088541950382
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -1072,7 +1072,7 @@ MonoBehaviour:
   attack: 0
   defense: 0
   rootGO: {fileID: 1978423089594721420}
-  block: 0
+  isDefend: 0
 --- !u!61 &1978423088861719106
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -1252,7 +1252,7 @@ MonoBehaviour:
   attack: 0
   defense: 0
   rootGO: {fileID: 1978423089594721420}
-  block: 0
+  isDefend: 0
 --- !u!61 &1978423089020647244
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -1366,7 +1366,7 @@ MonoBehaviour:
   attack: 0
   defense: 0
   rootGO: {fileID: 1978423089594721420}
-  block: 0
+  isDefend: 0
 --- !u!61 &1978423089086386373
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -1586,7 +1586,7 @@ MonoBehaviour:
   attack: 0
   defense: 0
   rootGO: {fileID: 1978423089594721420}
-  block: 0
+  isDefend: 0
 --- !u!61 &1978423089264088785
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -1840,7 +1840,7 @@ MonoBehaviour:
   attack: 0
   defense: 0
   rootGO: {fileID: 1978423089594721420}
-  block: 0
+  isDefend: 0
 --- !u!61 &1978423089561418366
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -2003,6 +2003,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1978423089594721421}
+  - component: {fileID: 5782943172665888540}
   - component: {fileID: 5278545211022732931}
   - component: {fileID: 1978423089594721419}
   - component: {fileID: 1978423089594721456}
@@ -2035,6 +2036,19 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5782943172665888540
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1978423089594721420}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: db56a481de47fc64da121ca676fa4ef5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  localTimeScale: 1
 --- !u!114 &5278545211022732931
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2518,7 +2532,7 @@ MonoBehaviour:
   attack: 0
   defense: 0
   rootGO: {fileID: 1978423089594721420}
-  block: 0
+  isDefend: 0
 --- !u!61 &1978423090120505408
 BoxCollider2D:
   m_ObjectHideFlags: 0

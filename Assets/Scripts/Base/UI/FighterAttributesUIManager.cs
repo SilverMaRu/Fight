@@ -12,8 +12,7 @@ public class FighterAttributesUIManager : MonoBehaviour
     // 关联的FighterAttributesManager
     private FighterAttributesManager relatedAttrManager;
 
-
-    // Start is called before the first frame update
+    //// Start is called before the first frame update
     void Start()
     {
         relatedPlayer = Player.GetPlayerByIndex(relatedPlayerIndex);
@@ -26,16 +25,18 @@ public class FighterAttributesUIManager : MonoBehaviour
         Transform myTrans = transform;
         if (HPUpdateStrip != null && HPUpdateStrip.gameObject.activeSelf)
         {
+            HPUpdateStrip.fighterIns = fighterIns;
             relatedAttrManager.HPChangeEvent += HPUpdateStrip.OnChange;
         }
         if (MPUpdateStrip != null && MPUpdateStrip.gameObject.activeSelf)
         {
+            MPUpdateStrip.fighterIns = fighterIns;
             relatedAttrManager.MPChangeEvent += MPUpdateStrip.OnChange;
         }
         if (SPUpdateStrip != null && SPUpdateStrip.gameObject.activeSelf)
         {
+            SPUpdateStrip.fighterIns = fighterIns;
             relatedAttrManager.SPChangeEvent += SPUpdateStrip.OnChange;
         }
-
     }
 }

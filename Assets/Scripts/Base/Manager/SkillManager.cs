@@ -17,11 +17,14 @@ public class SkillManager : MonoBehaviour
     // 当前技能
     [HideInInspector]
     public Skill currentSkill;
+    // 持续中的状态技能
+    [HideInInspector]
+    public List<StatusSkill> stayStatusSkillList = new List<StatusSkill>();
     [HideInInspector]
     public Animator anim;
     [HideInInspector]
     public FightInput fightInput;
-
+    
     // 身上的技能列表
     private Skill[] mySkills;
     // 起手技能列表

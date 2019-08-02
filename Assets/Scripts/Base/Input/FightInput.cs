@@ -112,30 +112,39 @@ public class FightInput : MonoBehaviour
 
     public bool IsKeyDown(params KeyCodeIndex[] keyCodeIdxs)
     {
-        KeyCode[] keyCodes = GetKeyCodes(keyCodeIdxs);
-        return EqualsKeyCodes(Tool.Sort(keyCodes), Tool.Sort(keysCache.CacheDistinctKeyCodes));
+        bool result = false;
+        if(keyCodeIdxs.Length == 1)
+        {
+            result = Input.GetKeyDown(GetKeyCode(keyCodeIdxs[0]));
+        }
+        else
+        {
+            KeyCode[] keyCodes = GetKeyCodes(keyCodeIdxs);
+            result = EqualsKeyCodes(Tool.Sort(keyCodes), Tool.Sort(keysCache.CacheDistinctKeyCodes));
+        }
+        return result;
     }
 
     public bool IsKey(params KeyCodeIndex[] keyCodeIdxs)
     {
-        bool resultIsKey = true;
+        bool result = true;
         foreach(KeyCodeIndex tempKCI in keyCodeIdxs)
         {
-            resultIsKey = resultIsKey && Input.GetKey(GetKeyCode(tempKCI));
-            if (!resultIsKey) break;
+            result = result && Input.GetKey(GetKeyCode(tempKCI));
+            if (!result) break;
         }
-        return resultIsKey;
+        return result;
     }
 
     public bool IsKeyUp(params KeyCodeIndex[] keyCodeIdxs)
     {
-        bool resultIsKey = true;
+        bool result = true;
         foreach (KeyCodeIndex tempKCI in keyCodeIdxs)
         {
-            resultIsKey = resultIsKey && Input.GetKeyUp(GetKeyCode(tempKCI));
-            if (!resultIsKey) break;
+            result = result && Input.GetKeyUp(GetKeyCode(tempKCI));
+            if (!result) break;
         }
-        return resultIsKey;
+        return result;
     }
 
     public bool IsDoubleKeyDown(KeyCodeIndex keyCodeIdx)
